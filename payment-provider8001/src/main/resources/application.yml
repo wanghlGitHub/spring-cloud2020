@@ -20,6 +20,7 @@ mybatis:
 eureka:
   client:
     register-with-eureka: true #是否将自己注册进 eureka服务端，默认为 true
-    service-url:
-      defaultZone: http://localhost:7001/eureka
     fetch-registry: true #是否从 eureka server 抓取已有的注册信息，默认为 true.单节点无所谓，集群必须设置为 true才能配合 ribbon 使用负载均衡
+    service-url:
+#      defaultZone: http://localhost:7001/eureka #单机版
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka  #集群版
