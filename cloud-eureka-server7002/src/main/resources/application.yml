@@ -9,3 +9,5 @@ eureka:
     service-url:
 #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/   #单机版配置
       defaultZone: http://eureka7001.com:7001/eureka/    #集群版配置，设置与eureka server交互的地址查询服务和注册服务都需要依赖这个地址
+  server:
+    enable-self-preservation: true # 自我保护机制，模式是开启状态，生产环境中通常为开启状态，false 为关闭

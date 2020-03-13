@@ -9,3 +9,5 @@ eureka:
     service-url:
 #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
       defaultZone: http://eureka7002.com:7002/eureka/
+  server:
+    enable-self-preservation: true # 自我保护机制，模式是开启状态，生产环境中通常为开启状态，false 为关闭
