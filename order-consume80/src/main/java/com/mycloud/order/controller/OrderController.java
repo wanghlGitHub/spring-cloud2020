@@ -30,11 +30,11 @@ public class OrderController {
 
 	@PostMapping("/create")
 	public CommonResult<Payment> create(Payment payment) {
-		return restTemplate.postForEntity(PAYMENT_URL + "/com.mycloud.com.mycloud.payment/create",payment, CommonResult.class).getBody();
+		return restTemplate.postForEntity(PAYMENT_URL + "/payment/create",payment, CommonResult.class).getBody();
 	}
 
 	@GetMapping("/get/{id}")
 	public CommonResult<Payment> getPayment(@PathVariable("id") Long id ){
-		return restTemplate.getForEntity(PAYMENT_URL + "/com.mycloud.com.mycloud.payment/get/" + id,CommonResult.class).getBody();
+		return restTemplate.getForEntity(PAYMENT_URL + "/payment/get/" + id,CommonResult.class).getBody();
 	}
 }
