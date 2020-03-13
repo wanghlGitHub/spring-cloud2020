@@ -5,7 +5,12 @@ import com.mycloud.api.entities.Payment;
 import com.mycloud.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @program: spring-cloud2020
@@ -23,6 +28,9 @@ public class PaymentController {
 
 	@Value("${server.port}")
 	private Integer port;
+
+	@Resource
+	DiscoveryClient discoveryClient;
 
 	@PostMapping("/create")
 	public CommonResult<Payment> createPayment(@RequestBody Payment payment) {
@@ -43,6 +51,20 @@ public class PaymentController {
 		} else {
 			return new CommonResult(400, "查询结果不存在，端口号：" + port + ",ID为：" + id);
 		}
+	}
+
+	@GetMapping("/discovery")
+	public Object discovery() {
+		List<String> services = discoveryClient.getServices();
+		for (String service : services) {
+			System.out.println("服务发现，服务名===== " + service);
+		}
+
+		List<ServiceInstance> instances = discoveryClient.getInstances("PAYMENT-SERVICE");
+		for (ServiceInstance instance : instances) {
+			System.out.println("PAYMENT-SERVICE 服务实例的 URI ：" + instance.getUri());
+		}
+		return this.discoveryClient;
 	}
 
 }
