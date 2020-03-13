@@ -18,18 +18,23 @@ import javax.annotation.Resource;
 @RequestMapping("/consumer/order")
 public class OrderController {
 
-	public static final String PAYMENT_URL = "http://localhost:8001";
+	//单机版可以这么写
+//	public static final String PAYMENT_URL = "http://localhost:8001";
+	/**
+	 * 集群模式下要写服务名
+	 */
+	public static final String PAYMENT_URL = "http://PAYMENT-SERVICE";
 
 	@Resource
 	RestTemplate restTemplate;
 
 	@PostMapping("/create")
 	public CommonResult<Payment> create(Payment payment) {
-		return restTemplate.postForEntity(PAYMENT_URL + "/payment/create",payment, CommonResult.class).getBody();
+		return restTemplate.postForEntity(PAYMENT_URL + "/com.mycloud.com.mycloud.payment/create",payment, CommonResult.class).getBody();
 	}
 
 	@GetMapping("/get/{id}")
 	public CommonResult<Payment> getPayment(@PathVariable("id") Long id ){
-		return restTemplate.getForEntity(PAYMENT_URL + "/payment/get/" + id,CommonResult.class).getBody();
+		return restTemplate.getForEntity(PAYMENT_URL + "/com.mycloud.com.mycloud.payment/get/" + id,CommonResult.class).getBody();
 	}
 }
