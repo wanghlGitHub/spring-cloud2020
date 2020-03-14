@@ -58,6 +58,7 @@ public class PaymentController {
 		List<String> services = discoveryClient.getServices();
 		for (String service : services) {
 			System.out.println("服务发现，服务名===== " + service);
+			System.out.println("服务发现，服务名===== " + service);
 		}
 
 		List<ServiceInstance> instances = discoveryClient.getInstances("PAYMENT-SERVICE");
