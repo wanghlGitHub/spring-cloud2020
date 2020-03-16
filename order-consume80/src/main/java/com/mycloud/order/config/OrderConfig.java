@@ -20,4 +20,13 @@ public class OrderConfig {
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
+
+	/**
+	 * 显示声明 负载策略，不适用 ribbon 默认的轮询
+	 * @return
+	 */
+//	@Bean
+//	public IRule customLoadBalancer(){
+//		return new RandomRule();
+//	}
 }
