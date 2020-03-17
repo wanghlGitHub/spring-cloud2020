@@ -3,6 +3,9 @@ package com.mycloud.payment.controller;
 import com.mycloud.api.entities.CommonResult;
 import com.mycloud.api.entities.Payment;
 import com.mycloud.payment.service.PaymentService;
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
@@ -21,6 +24,8 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/payment")
+//全局的服务降级方法，方法上标注 @HystrixCommand 注解的，有指定具体兜底的方法，使用指定的，没有指定的，使用全局的
+@DefaultProperties(defaultFallback = "defaultFallbackMethod")
 public class PaymentController {
 
 	@Autowired
@@ -54,6 +59,7 @@ public class PaymentController {
 	}
 
 	@GetMapping("/discovery")
+	@HystrixCommand //服务降级，但是未指定兜底方法，使用默认的
 	public Object discovery() {
 		List<String> services = discoveryClient.getServices();
 		for (String service : services) {
@@ -66,6 +72,31 @@ public class PaymentController {
 			System.out.println("PAYMENT-SERVICE 服务实例的 URI ：" + instance.getUri());
 		}
 		return this.discoveryClient;
+	}
+
+	@GetMapping("/ok/{id}")
+	public String testOk(@PathVariable("id") Long id) {
+		return "压测 ok,id ===== " + id;
+	}
+
+	@GetMapping("/timeOut/{id}")
+	@HystrixCommand(fallbackMethod = "timeOutFallBack",
+			commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")})
+	public String testTimeOut(@PathVariable("id") Long id) {
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return "压测 timeOut,id ===== " + id;
+	}
+
+	public String timeOutFallBack(@PathVariable("id") Long id) {
+		return "服务忙，请稍后再试！" + id;
+	}
+
+	public String defaultFallbackMethod() {
+		return "服务忙，请稍后再试！服务已降级";
 	}
 
 }

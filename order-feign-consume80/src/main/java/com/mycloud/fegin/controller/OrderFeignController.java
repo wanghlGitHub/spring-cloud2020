@@ -28,4 +28,14 @@ public class OrderFeignController {
 	public CommonResult<Payment> getPayment(@PathVariable("id") Long id) {
 		return paymentFeignService.getPayment(id);
 	}
+
+	@GetMapping("/ok/{id}")
+	public String testOk(@PathVariable("id") Long id) {
+		return paymentFeignService.testOk(id);
+	}
+
+	@GetMapping("/timeOut/{id}")
+	public String testTimeOut(@PathVariable("id") Long id) {
+		return paymentFeignService.testTimeOut(id);
+	}
 }

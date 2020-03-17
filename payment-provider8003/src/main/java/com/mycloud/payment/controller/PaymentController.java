@@ -67,4 +67,19 @@ public class PaymentController {
 		return this.discoveryClient;
 	}
 
+	@GetMapping("/ok/{id}")
+	public String testOk(@PathVariable("id") Long id) {
+		return "压测 ok,id ===== " + id;
+	}
+
+	@GetMapping("/timeOut/{id}")
+	public String testTimeOut(@PathVariable("id") Long id) {
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return "压测 timeOut,id ===== " + id;
+	}
+
 }
